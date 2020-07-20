@@ -1,0 +1,19 @@
+{
+  "name": "assertchris/laravel-renderless-components",
+  "description": "Create components with lazy-evaluated content",
+  "require": {
+    "php": "^7.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "RenderlessComponents\\": "source"
+    }
+  },
+  "extra": {
+    "laravel": {
+      "providers": [
+        "RenderlessComponents\\RenderlessComponentsProvider"
+      ]
+    }
+  }
+}

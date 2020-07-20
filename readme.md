@@ -65,3 +65,9 @@ composer require assertchris/laravel-renderless-components
 ```
 
 It automatically registers itself, so the only thing left is to extend `RenderlessComponents\RenderlessComponent` instead of `Illuminate\View\Component` and implement the abstract methods.
+
+## Caveats
+
+This does not work alongside the `facade/ignition` package, since this uses `eval` and that package tries to read the source code from a file. I don't know how to resolve this, but it probably involves a PR to the `facade/ignition` package.
+
+If you see an error that mentions `file_get_contents file not found`, it's probably this issue.

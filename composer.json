@@ -1,6 +1,7 @@
 {
   "name": "assertchris/laravel-renderless-components",
   "description": "Create components with lazy-evaluated content",
+  "license": "MIT",
   "require": {
     "php": "^7.4"
   },

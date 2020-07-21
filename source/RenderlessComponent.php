@@ -15,25 +15,54 @@ abstract class RenderlessComponent extends Component
     public function render()
     {
         $component = $this;
-        $children = trim($this->children);
 
-        $viewParams = $this->viewParams();
-        $renderParams = $this->renderParams();
-
-        $fn = <<<FN
-            return function ({$renderParams}) use (\$component) {
-                if (true):
-                    ?>
-                        {$children}
-                    <?php
-                endif;
-            };
-        FN;
-
-        $fn = eval($fn);
+        $file = $this->createViewFile();
 
         return view($this->view(), [
-            'render' => $fn,
-        ] + $viewParams);
+            'render' => require_once $file,
+        ] + $this->viewParams());
+    }
+
+    private function createViewFile(): string
+    {
+        $children = trim($this->children);
+        $renderParams = $this->renderParams();
+
+        $folder = $this->createComponentsFolder();
+        $file = $this->join($folder, sha1($this->view()) . '.php');
+
+        if (!file_exists($file) || app()->environment('local')) {
+            file_put_contents($file, trim(
+<<<FN
+<?php
+
+return function ({$renderParams}) use (\$component) {
+    if (true):
+        ?>
+            {$children}
+        <?php
+    endif;
+};
+FN
+            ));
+        }
+
+        return $file;
+    }
+
+    private function createComponentsFolder(): string
+    {
+        $folder = storage_path($this->join('framework', 'views', 'components'));
+
+        if (!file_exists($folder)) {
+            mkdir($folder);
+        }
+
+        return $folder;
+    }
+
+    private function join(...$parts): string
+    {
+        return join(DIRECTORY_SEPARATOR, $parts);
     }
 }

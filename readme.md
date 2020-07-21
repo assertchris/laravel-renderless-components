@@ -68,6 +68,4 @@ It automatically registers itself, so the only thing left is to extend `Renderle
 
 ## Caveats
 
-This does not work alongside the `facade/ignition` package, since this uses `eval` and that package tries to read the source code from a file. I don't know how to resolve this, but it probably involves a PR to the `facade/ignition` package.
-
-If you see an error that mentions `file_get_contents file not found`, it's probably this issue.
+- I've changed how the lazy-evaluated content is cached, so that this library works alongside `facade/ignition`. On local (or on any other env, if the file doesn't already exist); the lazy-evaluated content is cached in the `storage/framework/views/components` folder. If your view isn't updating, you might be in an environment other than `local`. You can change the environment or remove the cache files in that folder.
